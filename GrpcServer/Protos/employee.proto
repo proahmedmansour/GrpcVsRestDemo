@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcServer";
+
+service Employee {
+
+  // Sends an employee
+  rpc GetEmployee (EmployeeRequest) returns (EmployeeReply);
+
+  // Sends a list of employees
+  rpc GetEmployees (EmployeesRequest) returns (EmployeesReply);
+  
+  // Sends a list of employees as stream
+  rpc GetEmployeesStream (EmployeesRequest) returns (stream EmployeeReply);
+}
+
+message EmployeeRequest{
+	  int32 id = 1;
+}
+
+message EmployeeReply {
+  int32 id = 1;
+  string name = 2;
+  string department = 3;
+  double salary = 4;  // Using double for decimal salary
+  string date_of_birth = 5;  // Using string in ISO 8601 format for DateTime
+}
+
+message EmployeesRequest {
+  int32 count = 1;
+}
+
+message EmployeesReply {
+  repeated EmployeeReply employees = 1;
+}
