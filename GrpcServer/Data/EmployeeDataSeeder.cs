@@ -15,7 +15,7 @@ namespace GrpcServer.Data
             _context = context;
         }
 
-        public async Task SeedAsync(int numberOfRecords = 5_000_000)
+        public async Task SeedAsync(int numberOfRecords = 100000)
         {
             if (await _context.Employees.CountAsync() == numberOfRecords)
             {

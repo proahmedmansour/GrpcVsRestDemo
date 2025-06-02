@@ -1,10 +1,9 @@
+using GrpcServer.Data;
 using GrpcServer.Repositories;
 using GrpcServer.Services;
-using GrpcServer.Data;
-using Microsoft.EntityFrameworkCore;
-using GrpcServer.Controllers;
-using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,13 +11,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options =>
 {
     // HTTP/1.1 endpoint for REST API
-    options.ListenAnyIP(5000, listenOptions =>
+    options.ListenAnyIP(5010, listenOptions =>
     {
         listenOptions.Protocols = HttpProtocols.Http1;
     });
 
     // HTTP/2 endpoint for gRPC
-    options.ListenAnyIP(5001, listenOptions =>
+    options.ListenAnyIP(5011, listenOptions =>
     {
         listenOptions.Protocols = HttpProtocols.Http2;
     });
@@ -45,9 +44,9 @@ builder.Services.AddEndpointsApiExplorer();
 // Configure Swagger
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo 
-    { 
-        Title = "Employee API", 
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Employee API",
         Version = "v1",
         Description = "A sample API for comparing gRPC and REST performance"
     });
@@ -81,15 +80,15 @@ app.MapControllers();
 app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 
 // Ensure database is created and seeded
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<ApplicationDbContext>();
-    context.Database.EnsureCreated();
+//using (var scope = app.Services.CreateScope())
+//{
+//    var services = scope.ServiceProvider;
+//    var context = services.GetRequiredService<ApplicationDbContext>();
+//    context.Database.EnsureCreated();
 
-    // Seed the database
-    var seeder = new EmployeeDataSeeder(context);
-    await seeder.SeedAsync();
-}
+//    // Seed the database
+//    var seeder = new EmployeeDataSeeder(context);
+//    await seeder.SeedAsync();
+//}
 
 app.Run();

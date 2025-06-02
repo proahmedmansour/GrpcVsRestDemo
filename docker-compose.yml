@@ -1,0 +1,41 @@
+services:
+  grpc-server:
+    build:
+      context: .
+      dockerfile: GrpcServer/Dockerfile
+    ports:
+      - "5000:5010"
+      - "5001:5011"
+    networks:
+      - grpc-network
+    depends_on:
+      - sql-server
+
+  grpc-client:
+    build:
+      context: .
+      dockerfile: GrpcClient/Dockerfile
+    depends_on:
+      - grpc-server
+    networks:
+      - grpc-network
+
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sql-server
+    environment:
+      SA_PASSWORD: "P@ssw0rd"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    networks:
+      - grpc-network
+    volumes:
+      - sql-data:/var/opt/mssql
+
+networks:
+  grpc-network:
+    driver: bridge
+
+volumes:
+  sql-data:

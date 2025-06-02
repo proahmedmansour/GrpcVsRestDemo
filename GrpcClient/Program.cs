@@ -4,7 +4,7 @@ using OfficeOpenXml;
 ExcelPackage.License.SetNonCommercialPersonal("Mansour"); //This will also set the Author property to the name provided in the argument.
 
 Console.WriteLine("Starting gRPC client...");
-string serverUrl = "http://localhost:5001";
+string serverUrl = "http://grpc-server:5011";
 var grpcService = new GrpcEmployeeClientService(serverUrl);
 
 try
